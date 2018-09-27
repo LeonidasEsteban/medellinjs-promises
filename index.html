@@ -7,8 +7,73 @@
   <title>Pokemon</title>
 </head>
 <body>
+  <img src="" alt="" id="image">
+  <p id="name"></p>
+  <form action="" id="form">
+    <input type="text" name="name">
+    <button>Buscar</button>
+  </form>
+
+
   <script>
     console.log('Hola mundo!')
+    const $image = document.querySelector('#image');
+    const $name = document.querySelector('#name');
+
+    const $form = document.querySelector('#form');
+    $form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      console.log(event);
+      const form = new FormData($form);
+      const id = form.get('name');
+      const pokemon = await getPokemon(id);
+      $image.setAttribute('src', pokemon.sprites.front_default)
+      $name.innerHTML = `<strong>${pokemon.name}</strong>`
+
+    })
+    // promesas
+    new Promise((todoBien, todoMal) => {
+      // acaso hay bandeja paisa?
+      setTimeout(()=> {
+        if (false) {
+          todoBien('Aquí tiene buen señor')
+        } else {
+          todoMal('no hay comida')
+        }
+      }, 3000);
+    })
+    .then((mensaje) => {
+      console.log(mensaje)
+    })
+    .catch((mensaje) => {
+      console.log(mensaje)
+    })
+
+    // fetch 
+    // GET
+    fetch('https://pokeapi.co/api/v2/pokemon/1/')
+    .then((respuesta)=> {
+      console.log(respuesta)
+      respuesta.json()
+      .then((pokemon)=>{
+        console.log(pokemon)
+      })
+    })
+    .catch()
+
+    // async await - funciones asíncronas
+    const BASE_API = 'https://pokeapi.co/api/v2/pokemon/';
+    async function getPokemon(id) {
+      const response = await fetch(`${BASE_API}${id}/`);
+      const pokemon =  await response.json();
+      return pokemon;
+      // console.log(pokemon);
+    }
+
+    getPokemon('pikachu')
+
+
+    
   </script>
 </body>
 </html>
